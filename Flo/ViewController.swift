@@ -36,8 +36,15 @@ class ViewController: UIViewController {
     
     @IBOutlet private weak var counterView: CounterView!
     @IBOutlet private weak var counterLable: UILabel!
+    @IBOutlet private weak var containerView: UIView!
+    @IBOutlet private weak var graphView: GraphView!
+    @IBOutlet private weak var averageWaterDrunk: UILabel!
+    @IBOutlet private weak var maxLabel: UILabel!
+    @IBOutlet private weak var stackView: UIStackView!
+    @IBOutlet private weak var plusButton: PushButton!
     
     private var countOfGlasses = 0
+    private var isGraphViewShowing = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -47,20 +54,84 @@ class ViewController: UIViewController {
     private func updateUI() {
         counterView.counter = countOfGlasses
         counterLable.text = "\(countOfGlasses)"
+        setupGraphDisplay()
     }
     
-    @IBAction private func didTapPlus(_ sender: Any) {
+    private func buttonPressAnimation() -> CAAnimation {
+        let symbolTransformation = CABasicAnimation(keyPath: "transform.scale")
+        symbolTransformation.fromValue = 1
+        symbolTransformation.toValue = 0.9
+        symbolTransformation.duration = 0.5
+        return symbolTransformation
+    }
+    
+    func setupGraphDisplay() {
+      let maxDayIndex = stackView.arrangedSubviews.count - 1
+      graphView.graphPoints[graphView.graphPoints.count - 1] = counterView.counter
+      graphView.setNeedsDisplay()
+      maxLabel.text = "\(graphView.graphPoints.max() ?? 0)"
+        
+      let average = graphView.graphPoints.reduce(0, +) / graphView.graphPoints.count
+      averageWaterDrunk.text = "Average: \(average)"
+        
+      let today = Date()
+      let calendar = Calendar.current
+      let formatter = DateFormatter()
+      formatter.setLocalizedDateFormatFromTemplate("EEEEE")
+      
+      for i in 0...maxDayIndex {
+        if let date = calendar.date(byAdding: .day, value: -i, to: today),
+          let label = stackView.arrangedSubviews[maxDayIndex - i] as? UILabel {
+          label.text = formatter.string(from: date)
+        }
+      }
+    }
+    
+    @IBAction private func didTapPlus(_ sender: UIButton) {
         if countOfGlasses < 8 {
             countOfGlasses += 1
             updateUI()
         }
+        if isGraphViewShowing {
+            counterViewTap(nil)
+        }
+        
+        sender.layer.add(buttonPressAnimation(), forKey: nil)
     }
     
-    @IBAction private func didTapMinus(_ sender: Any) {
+    @IBAction private func didTapMinus(_ sender: UIButton) {
         if countOfGlasses > 0 {
             countOfGlasses -= 1
             updateUI()
         }
+        if isGraphViewShowing {
+            counterViewTap(nil)
+        }
+        
+        sender.layer.add(buttonPressAnimation(), forKey: nil)
+    }
+    
+    @IBAction func counterViewTap(_ gesture: UITapGestureRecognizer?) {
+        // Hide Graph
+        if isGraphViewShowing {
+            UIView.transition(
+                from: graphView,
+                to: counterView,
+                duration: 1.0,
+                options: [.transitionFlipFromLeft, .showHideTransitionViews],
+                completion: nil
+            )
+        } else {
+            // Show Graph
+            UIView.transition(
+                from: counterView,
+                to: graphView,
+                duration: 1.0,
+                options: [.transitionFlipFromRight, .showHideTransitionViews],
+                completion: nil
+            )
+        }
+        isGraphViewShowing.toggle()
     }
     
 }

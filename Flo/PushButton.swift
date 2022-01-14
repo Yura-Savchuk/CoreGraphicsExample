@@ -40,32 +40,107 @@ class PushButton: UIButton {
         static let plusLineWidth = 6.0
     }
     
-    @IBInspectable var fillColor: UIColor = .green
-    @IBInspectable var isAddButton: Bool = true
-
-    override func draw(_ rect: CGRect) {
-        drawCircle(rect)
-        drawSymbol(rect)
+    @IBInspectable var fillColor: UIColor = .green {
+        didSet {
+            pushButtonLayer?.fillColor = fillColor
+        }
     }
-
-    private func drawCircle(_ rect: CGRect) {
-        fillColor.setFill()
-        UIBezierPath(ovalIn: rect).fill()
+    @IBInspectable var shape: String = PushButtonLayer.Shapes.plus {
+        didSet {
+            pushButtonLayer?.shape = shape
+        }
     }
     
-    private func drawSymbol(_ rect: CGRect) {
-        UIColor.white.setStroke()
-        let path = UIBezierPath()
-        path.lineWidth = Constants.plusLineWidth
-        path.move(to: CGPoint(x: (rect.width-Constants.plusSize)/2, y: rect.height/2))
-        path.addLine(to: CGPoint(x: (rect.width+Constants.plusSize)/2, y: rect.height/2))
-        
-        if isAddButton {
-            path.move(to: CGPoint(x: rect.width/2, y: (rect.height-Constants.plusSize)/2))
-            path.addLine(to: CGPoint(x: rect.width/2, y: (rect.height+Constants.plusSize)/2))
+    var symbolLayer: CAShapeLayer!
+    
+    override class var layerClass: AnyClass {
+        return PushButtonLayer.self
+    }
+    
+    var pushButtonLayer: PushButtonLayer? {
+        get {
+            layer as? PushButtonLayer
+        }
+    }
+    
+    override func draw(_ rect: CGRect) {
+    }
+    
+}
+
+class PushButtonLayer: CALayer {
+    
+    private struct Constants {
+        static let plusSize = 40.0
+        static let plusLineWidth = 6.0
+    }
+    
+    enum Shapes {
+        static let plus = "plus"
+        static let minus = "minus"
+        static let oval = "oval"
+    }
+    
+    override init(layer: Any) {
+        if let pushButtonLayer = layer as? PushButtonLayer {
+            self.shape = pushButtonLayer.shape
+            self.fillColor = pushButtonLayer.fillColor
+        }
+        super.init(layer: layer)
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    override init() {
+        super.init()
+    }
+    
+    var fillColor: UIColor = .green
+    @objc dynamic var shape: String = Shapes.plus
+    
+    override func animationKeys() -> [String]? {
+        return ["shape"]
+    }
+    
+    override class func needsDisplay(forKey key: String) -> Bool {
+        if key == "shape" {
+            return true
+        }
+        return super.needsDisplay(forKey: key)
+    }
+    
+    override func draw(in ctx: CGContext) {
+        super.draw(in: ctx)
+        drawBackground(in: ctx)
+        drawSymbol(in: ctx)
+    }
+    
+    private func drawBackground(in ctx: CGContext) {
+        ctx.setFillColor(fillColor.cgColor)
+        ctx.fillEllipse(in: bounds)
+    }
+    
+    private func drawSymbol(in ctx: CGContext) {
+        ctx.setStrokeColor(UIColor.white.cgColor)
+        ctx.setLineWidth(Constants.plusLineWidth)
+
+        if shape == Shapes.plus || shape == Shapes.minus {
+            ctx.move(to: CGPoint(x: (bounds.width-Constants.plusSize)/2, y: bounds.height/2))
+            ctx.addLine(to: CGPoint(x: (bounds.width+Constants.plusSize)/2, y: bounds.height/2))
+        }
+
+        if shape == Shapes.plus {
+            ctx.move(to: CGPoint(x: bounds.width/2, y: (bounds.height-Constants.plusSize)/2))
+            ctx.addLine(to: CGPoint(x: bounds.width/2, y: (bounds.height+Constants.plusSize)/2))
+        }
+
+        if shape == Shapes.oval {
+            ctx.addArc(center: CGPoint(x: bounds.midX, y: bounds.midY), radius: 10.0, startAngle: 0, endAngle: 2*CGFloat.pi, clockwise: true)
         }
         
-        path.stroke()
+        ctx.strokePath()
     }
     
 }

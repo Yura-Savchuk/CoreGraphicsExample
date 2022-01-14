@@ -12,6 +12,7 @@
 		437AE1EB1F02685B001EE6E4 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437AE1E91F02685B001EE6E4 /* Main.storyboard */; };
 		437AE1ED1F02685B001EE6E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 437AE1EC1F02685B001EE6E4 /* Assets.xcassets */; };
 		437AE1F01F02685B001EE6E4 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 437AE1EE1F02685B001EE6E4 /* LaunchScreen.storyboard */; };
+		523A79B2279093410037C62F /* GraphView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 523A79B1279093410037C62F /* GraphView.swift */; };
 		F04262C2278F1A8E005A4BBB /* PushButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04262C1278F1A8E005A4BBB /* PushButton.swift */; };
 		F04262C6278F3AD2005A4BBB /* CounterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = F04262C5278F3AD2005A4BBB /* CounterView.swift */; };
 /* End PBXBuildFile section */
@@ -24,6 +25,7 @@
 		437AE1EC1F02685B001EE6E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		437AE1EF1F02685B001EE6E4 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		437AE1F11F02685B001EE6E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		523A79B1279093410037C62F /* GraphView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GraphView.swift; sourceTree = "<group>"; };
 		F04262C1278F1A8E005A4BBB /* PushButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PushButton.swift; sourceTree = "<group>"; };
 		F04262C5278F3AD2005A4BBB /* CounterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CounterView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -62,6 +64,7 @@
 				437AE1E71F02685B001EE6E4 /* ViewController.swift */,
 				F04262C1278F1A8E005A4BBB /* PushButton.swift */,
 				F04262C5278F3AD2005A4BBB /* CounterView.swift */,
+				523A79B1279093410037C62F /* GraphView.swift */,
 				437AE1E91F02685B001EE6E4 /* Main.storyboard */,
 				437AE1EC1F02685B001EE6E4 /* Assets.xcassets */,
 				437AE1EE1F02685B001EE6E4 /* LaunchScreen.storyboard */,
@@ -142,6 +145,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				523A79B2279093410037C62F /* GraphView.swift in Sources */,
 				437AE1E81F02685B001EE6E4 /* ViewController.swift in Sources */,
 				437AE1E61F02685B001EE6E4 /* AppDelegate.swift in Sources */,
 				F04262C2278F1A8E005A4BBB /* PushButton.swift in Sources */,
